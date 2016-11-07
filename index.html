@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Android-sensors by Narxem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Android-sensors</h1>
+      <h2 class="project-tagline">TP découverte de l&#39;utilisation des capteurs</h2>
+      <a href="https://github.com/Narxem/android-sensors" class="btn">View on GitHub</a>
+      <a href="https://github.com/Narxem/android-sensors/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Narxem/android-sensors/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="tp-android--les-capteurs" class="anchor" href="#tp-android--les-capteurs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TP Android : Les capteurs</h1>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>De nombreuses applications présentes sur le store utilisent les capteurs de notre téléphone. Ces capteurs sont toujours de plus en plus nombreux. Dans ce tutoriel, vous allez apprendre comment les exploiter.</p>
+
+<h2>
+<a id="1---demander-la-présence-dun-capteur" class="anchor" href="#1---demander-la-pr%C3%A9sence-dun-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1 - Demander la présence d'un capteur</h2>
+
+<p>Il peut arriver qu'une application ne peut être utilisée que si le device dispose d'un capteur spécifique. Il n'aurait en effet pas de sens de télécharger un jeu basé sur l'accélèromètre si ce dernier n'est pas présent.</p>
+
+<p>Dans ce cas, on ajoute un tag dans le manifest. Par exemple, pour l'accélèromètre, on ajoutera : </p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">use-feature</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.hardware.sensor.accelerometer<span class="pl-pds">"</span></span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">required</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;</pre></div>
+
+<p>Le paramètre <code>required</code> à <code>true</code> signifie que le capteur est obligatoire et interdit le téléchargement de l'application s'il n'est pas présent. On peut le mettre à <code>false</code> pour indiquer à l'utilisateur que le capteur n'est pas obligatoire mais fortement recommandé.</p>
+
+<h2>
+<a id="2---accès-aux-capteurs" class="anchor" href="#2---acc%C3%A8s-aux-capteurs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2 - Accès aux capteurs</h2>
+
+<p>L'accès aux capteurs se fait via la classe <code>SensorManager</code>. Elle permet d'obtenir des informations sur les capteurs présents sur le device.</p>
+
+<p>Pour en obtenir une instance :</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">SensorManager</span> sensorManager <span class="pl-k">=</span> (<span class="pl-smi">SensorManager</span>) getSystemService(<span class="pl-smi">Context</span><span class="pl-c1"><span class="pl-k">.</span>SENSOR_SERVICE</span>);</pre></div>
+
+<h3>
+<a id="utilisation-de-sensormanager" class="anchor" href="#utilisation-de-sensormanager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Utilisation de <code>SensorManager</code>
+</h3>
+
+<ul>
+<li>
+<code>List&lt;Sensor&gt; getSensorList(int type)</code> : obtenir la liste des capteurs du type passé en paramètre (les types seront listés plus loin)</li>
+<li>
+<code>Sensor getDefaultSensor(int type)</code> : obtenir le capteur par défaut du type passé en paramètre</li>
+</ul>
+
+<p>L'entier passé en paramètre est un id de type de capteur. Ces constantes sont définies dans la classe <code>Sensor</code>. Les plus utilisées sont :</p>
+
+<ul>
+<li>
+<code>TYPE_ACCELEROMETER</code> pour l'accélèromètre</li>
+<li>
+<code>TYPE_GYROSCOPE</code> pour le gyroscope</li>
+<li>
+<code>TYPE_LIGHT</code> pour le capteur de lumière</li>
+<li>
+<code>TYPE_PROXIMITY</code> pour le capteur de proximité</li>
+<li>
+<code>TYPE_ALL</code> pour tous les capteurs. Utile dans <code>getSensorList()</code> pour obtenir la liste de tous les capteurs</li>
+</ul>
+
+<p>Pour obtenir un capteur :</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Sensor</span> accelerometer <span class="pl-k">=</span> sensorManager<span class="pl-k">.</span>getDefaultSensor(<span class="pl-smi">Sensor</span><span class="pl-c1"><span class="pl-k">.</span>TYPE_ACCELEROMETER</span>);</pre></div>
+
+<p>Pensez à toujours vérifier si le capteur a bien été trouvé, car s'il n'est pas présent, alors cette méthode vous renverra <code>null</code> et fera planter votre application par une jolie <code>NullPointerException</code> si vous tentez d'utiliser la variable directement ! Prévoyez toujours un comportement à adopter si aucun capteur n'est présent.</p>
+
+<h2>
+<a id="3---exploitation-du-capteur" class="anchor" href="#3---exploitation-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3 - Exploitation du capteur</h2>
+
+<p>Nous allons maintenant faire appel à une nouvelle interface : <code>SensorEventListener</code> qui va écouter nos capteurs pour transmetre les valeurs.</p>
+
+<p>Il faudra alors créer une classe qui implémente cette interface, et qui contiendra 2 méthodes</p>
+
+<h3>
+<a id="void-onaccuracychangedsensor-sensor-int-accuracy" class="anchor" href="#void-onaccuracychangedsensor-sensor-int-accuracy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>void onAccuracyChanged(Sensor sensor, int accuracy)</code>
+</h3>
+
+<p>Cette méthode est appelée en cas de changement de précision du capteur. Dans notre cas, on peut tout simplement ne rien faire</p>
+
+<h3>
+<a id="void-onsensorchangedsensorevent-event" class="anchor" href="#void-onsensorchangedsensorevent-event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>void onSensorChanged(SensorEvent event)</code>
+</h3>
+
+<p>Cette méthode nous interresse plus, elle est appelée dès que le capteur detecte un changement. L'objet <code>SensorEvent</code> contient des données utiles : </p>
+
+<ul>
+<li>
+<code>event.sensor</code> : le capteur en question</li>
+<li>
+<code>event.accuracy</code> : la précision du capteur</li>
+<li>
+<code>event.timestamp</code> : la nanoseconde à laquelle le changement a été détecté</li>
+<li>
+<code>event.values</code> : un tableau de <code>float</code> contenant les valeurs qui nous interressent</li>
+</ul>
+
+<p>Il faut donc faire notre traitement dans cette méthode. 
+/!\ : Il ne faut JAMAIS lancer d'opération bloquante ou d'opération gourmande en mémoire ici, car cette méthode sera invoquée très souvent. Vous pouriez saturer la mémoire du device très rapidement.</p>
+
+<h2>
+<a id="4---ecoute-du-capteur" class="anchor" href="#4---ecoute-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4 - Ecoute du capteur</h2>
+
+<p>Dernière étape : nous avons notre listener, il faut maintenant écouter notre capteur.
+On fait cela à de nouveau à l'aide de notre objet <code>SensorManager</code>.
+On utilise la méthode <code>registerListener(SensorEventListener listener, Sensor sensor, int delay)</code> avec</p>
+
+<ul>
+<li>
+<code>listener</code> : une instance du <code>SensorEventListener</code> que nous venons de créer</li>
+<li>
+<code>sensor</code> : le capteur à écouter</li>
+<li>
+<code>delay</code> : le délai entre chaque écoute. Cela peut être :
+
+<ul>
+<li>
+<code>sensorManager.SENSOR_DELAY_NORMAL</code> : pour une écoute "normale", c'est le délai le plus lent</li>
+<li>
+<code>sensorManager.SENSOR_DELAY_UI</code> : plus rapide, pour une écoute qui met à jour l'interface</li>
+<li>
+<code>sensorManager.SENSOR_DELAY_GAME</code> : encore plus rapide, pour une utilisation en jeu</li>
+<li>
+<code>sensorManager.SENSOR_DELAY_FASTEST</code> : le plus rapide, rarement utile.</li>
+</ul>
+</li>
+</ul>
+
+<p>Enfin, il ne faut pas oublier de désactiver le listener avec la méthode <code>unregisterListener(SensorEventListener listener)</code> lorsqu'on ne l'utilise pas. Je conseille de le faire dans le <code>onPause()</code> ou le <code>onStop()</code> (et donc <code>registerListener</code> respectivement dans <code>onResume()</code> ou <code>onStart()</code>).</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Narxem/android-sensors">Android-sensors</a> is maintained by <a href="https://github.com/Narxem">Narxem</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
