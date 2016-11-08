@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SensorManager sensorManager;
 
-    private SensorEventListener listener = new AccelerometerListener();
+    //private SensorEventListener listener = new AccelerometerListener();
 
     private final double THRESHOLD = .5;
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         hello = (TextView) findViewById(R.id.hello);
         image = (ImageView) findViewById(R.id.shake);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         initialized = false;
     }
@@ -51,20 +51,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Sensor acc = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        Sensor acc = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        /*
         if (acc == null)
             hello.setText("Vous n'avez pas d'accélèromètre");
         else {
             hello.setText("Valeurs de l'accélèromètre");
             sensorManager.registerListener(listener, acc, SensorManager.SENSOR_DELAY_UI);
-        }
+        }*/
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        sensorManager.unregisterListener(listener);
+//        sensorManager.unregisterListener(listener);
     }
 
 
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+/*
     protected class AccelerometerListener implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -123,5 +125,5 @@ public class MainActivity extends AppCompatActivity {
             // Nothing to do here
         }
     }
-
+*/
 }

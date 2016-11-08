@@ -22,7 +22,7 @@ public class GyroscopeActivity extends AppCompatActivity {
     private ImageView image;
     private TextView gyroFound;
 
-    private SensorEventListener listener = new GyroscopeListener();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,22 +39,17 @@ public class GyroscopeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Sensor gyro = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
-        if (gyro == null) {
-            gyroFound.setText("Aucun capteur d'oriantation");
-        }
-        else {
-            gyroFound.setText("Capteur d'orientation trouvé");
-            sensorManager.registerListener(listener, gyro, SensorManager.SENSOR_DELAY_GAME);
-        }
+        // TODO Récupérer le capteur d'orientation, le tester et l'enregistrer.
+        // Pour récupérer le capteur d'orientation, utilisez
+        // TYPE_ORIENTATION à la place de TYPE_ACCELEROMETER
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        sensorManager.unregisterListener(listener);
+        // TODO Désenregistrer le listener
     }
 
     public void toAccelerometer(View view) {
@@ -62,32 +57,15 @@ public class GyroscopeActivity extends AppCompatActivity {
     }
 
 
-    protected class GyroscopeListener implements SensorEventListener {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            rotateCreeper(-event.values[0]);
-        }
+    // TODO Créer votre Listener.
 
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Nothing to do here
-        }
-
-
-
-    }
 
     /**
-     * Effectue une rotation sur le creeper
+     * Pivote le creeper d'un certain angle par rapport à sa position de départ
      * @param angle La valeur de l'angle en degrés, entre 0 et 360
      */
     public void rotateCreeper(float angle) {
-/*        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
 
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),  matrix, true);
-        image.setImageBitmap(resizedBitmap);*/
         image.setPivotX(image.getWidth() / 2);
         image.setPivotY(image.getHeight() / 2);
         image.setRotation(angle);

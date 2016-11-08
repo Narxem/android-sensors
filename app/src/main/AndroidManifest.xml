@@ -15,11 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+<!--
         <use-feature
             android:name="android.hardware.sensor.accelerometer"
-            android:required="true" />
-
+            android:required="false" />
+-->
         <activity android:name=".GyroscopeActivity"></activity>
     </application>
 
