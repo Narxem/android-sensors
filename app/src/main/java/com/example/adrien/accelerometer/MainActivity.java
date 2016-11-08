@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 dy = (dy > THRESHOLD) ? dy : 0.;
                 dz = (dz > THRESHOLD) ? dz : 0.;
 
+
                 xView.setText("X : " + String.valueOf(dx));
                 yView.setText("Y : " + String.valueOf(dy));
                 zView.setText("Z : " + String.valueOf(dz));

@@ -24,7 +24,6 @@ public class GyroscopeActivity extends AppCompatActivity {
 
     private SensorEventListener listener = new GyroscopeListener();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
