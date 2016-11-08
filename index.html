@@ -27,6 +27,8 @@
 
 <p>De nombreuses applications présentes sur le store utilisent les capteurs de notre téléphone. Ces capteurs sont toujours de plus en plus nombreux. Dans ce tutoriel, vous allez apprendre comment les exploiter.</p>
 
+<p>Dans ce tutoriel, j'indiquerai <em>comme ceci</em> les fichiers et/ou méthodes dans lesquelles il faut décommenter des instructions</p>
+
 <h2>
 <a id="1---demander-la-présence-dun-capteur" class="anchor" href="#1---demander-la-pr%C3%A9sence-dun-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1 - Demander la présence d'un capteur</h2>
 
@@ -35,6 +37,8 @@
 <p>Dans ce cas, on ajoute un tag dans le manifest. Par exemple, pour l'accélèromètre, on ajoutera : </p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">use-feature</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.hardware.sensor.accelerometer<span class="pl-pds">"</span></span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">required</span>=<span class="pl-s"><span class="pl-pds">"</span>true<span class="pl-pds">"</span></span>/&gt;</pre></div>
+
+<p><em>AndroidManifest.xml</em></p>
 
 <p>Le paramètre <code>required</code> à <code>true</code> signifie que le capteur est obligatoire et interdit le téléchargement de l'application s'il n'est pas présent. On peut le mettre à <code>false</code> pour indiquer à l'utilisateur que le capteur n'est pas obligatoire mais fortement recommandé.</p>
 
@@ -46,6 +50,8 @@
 <p>Pour en obtenir une instance :</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">SensorManager</span> sensorManager <span class="pl-k">=</span> (<span class="pl-smi">SensorManager</span>) getSystemService(<span class="pl-smi">Context</span><span class="pl-c1"><span class="pl-k">.</span>SENSOR_SERVICE</span>);</pre></div>
+
+<p><em>MainActivity.java -&gt; onCreate()</em></p>
 
 <h3>
 <a id="utilisation-de-sensormanager" class="anchor" href="#utilisation-de-sensormanager" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Utilisation de <code>SensorManager</code>
@@ -77,26 +83,30 @@
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">Sensor</span> accelerometer <span class="pl-k">=</span> sensorManager<span class="pl-k">.</span>getDefaultSensor(<span class="pl-smi">Sensor</span><span class="pl-c1"><span class="pl-k">.</span>TYPE_ACCELEROMETER</span>);</pre></div>
 
+<p><em>MainActivity.java -&gt; onStart()</em></p>
+
 <p>Pensez à toujours vérifier si le capteur a bien été trouvé, car s'il n'est pas présent, alors cette méthode vous renverra <code>null</code> et fera planter votre application par une jolie <code>NullPointerException</code> si vous tentez d'utiliser la variable directement ! Prévoyez toujours un comportement à adopter si aucun capteur n'est présent.</p>
+
+<p><em>MainActivity.java -&gt; onStart()</em></p>
 
 <h2>
 <a id="3---exploitation-du-capteur" class="anchor" href="#3---exploitation-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3 - Exploitation du capteur</h2>
 
 <p>Nous allons maintenant faire appel à une nouvelle interface : <code>SensorEventListener</code> qui va écouter nos capteurs pour transmettre les valeurs.</p>
 
-<p>Il faudra alors créer une classe qui implémente cette interface, et qui contiendra 2 méthodes</p>
+<p>Il faudra alors créer une classe qui implémente cette interface, et qui contiendra 2 méthodes :</p>
 
 <h3>
 <a id="void-onaccuracychangedsensor-sensor-int-accuracy" class="anchor" href="#void-onaccuracychangedsensor-sensor-int-accuracy" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>void onAccuracyChanged(Sensor sensor, int accuracy)</code>
 </h3>
 
-<p>Cette méthode est appelée en cas de changement de précision du capteur. Dans notre cas, on peut tout simplement ne rien faire</p>
+<p>Cette méthode est appelée en cas de changement de précision du capteur. Dans notre cas, on peut tout simplement ne rien faire.</p>
 
 <h3>
 <a id="void-onsensorchangedsensorevent-event" class="anchor" href="#void-onsensorchangedsensorevent-event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>void onSensorChanged(SensorEvent event)</code>
 </h3>
 
-<p>Cette méthode nous interresse plus, elle est appelée dès que le capteur détecte un changement. L'objet <code>SensorEvent</code> contient des données utiles : </p>
+<p>Cette méthode nous interresse plus, elle est appelée dès que le capteur detecte un changement. L'objet <code>SensorEvent</code> contient des données utiles : </p>
 
 <ul>
 <li>
@@ -111,6 +121,9 @@
 
 <p>Il faut donc faire notre traitement dans cette méthode. 
 /!\ : Il ne faut JAMAIS lancer d'opération bloquante ou d'opération gourmande en mémoire ici, car cette méthode sera invoquée très souvent. Vous pourriez saturer la mémoire du device très rapidement.</p>
+
+<p><em>MainActivity.java -&gt; Classe interne <code>AccelerometerListener</code></em>
+<em>MainActivity.jave -&gt; ligne 30 (<code>SensorEventListener</code>)</em></p>
 
 <h2>
 <a id="4---ecoute-du-capteur" class="anchor" href="#4---ecoute-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4 - Ecoute du capteur</h2>
@@ -141,6 +154,37 @@ On utilise la méthode <code>registerListener(SensorEventListener listener, Sens
 </ul>
 
 <p>Enfin, il ne faut pas oublier de désactiver le listener avec la méthode <code>unregisterListener(SensorEventListener listener)</code> lorsqu'on ne l'utilise pas. Je conseille de le faire dans le <code>onPause()</code> ou le <code>onStop()</code> (et donc <code>registerListener</code> respectivement dans <code>onResume()</code> ou <code>onStart()</code>).</p>
+
+<p><em>MainActivity.java -&gt; onStop()</em></p>
+
+<h1>
+<a id="tp" class="anchor" href="#tp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TP</h1>
+
+<p>Vous pouvez maintenant tenter d'exploiter ce tutoriel pour utiliser le capteur d'orientation de votre téléphone</p>
+
+<p>L'activité (improprement) appelée <code>GyroscopeActivity</code> affiche une image et fournie une méthode permettant de faire subir une rotation à cette image. </p>
+
+<p>A vous de faire en sorte de le creeper reste toujours dans le même sens quand vous pivotez votre téléphone / tablette (l'activité est verouillée en mode portrait)</p>
+
+<p>Vous disposez de plusieurs possibilités pour la créaction de votre listener : </p>
+
+<ul>
+<li>Vous pouvez faire un classe interne, comme dans la <code>MainActivity.java</code>
+</li>
+<li>Vous pouvez en faire un classe anonyme au moment de l'enregistrement du capteur et du listener</li>
+<li>Vous pouvez faire que l'activité implémente <code>SensorEventListener</code> et définir directement les méthode dans l'activité. A ce moment la, mettez <code>this</code> comme listener au moment de l'enregistrement</li>
+</ul>
+
+<p>Enfin, <code>GyroscopeActivity</code> contient la méthode <code>rotateCreeper(float angle)</code> pour faire tourner l'image d'un certain angle (en degrés) par rapport à sa position de départ</p>
+
+<p>N'hésitez pas à vous inspirer de <code>MainActivity</code> si vous avez des difficultés.</p>
+
+<h3>
+<a id="solution" class="anchor" href="#solution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Solution</h3>
+
+<p>Une solution se trouve sur la branche final-code. Pour y acceder :</p>
+
+<div class="highlight highlight-source-shell"><pre>git checkout final-code</pre></div>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Narxem/android-sensors">Android-sensors</a> is maintained by <a href="https://github.com/Narxem">Narxem</a>.</span>
