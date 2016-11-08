@@ -82,7 +82,7 @@
 <h2>
 <a id="3---exploitation-du-capteur" class="anchor" href="#3---exploitation-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3 - Exploitation du capteur</h2>
 
-<p>Nous allons maintenant faire appel à une nouvelle interface : <code>SensorEventListener</code> qui va écouter nos capteurs pour transmetre les valeurs.</p>
+<p>Nous allons maintenant faire appel à une nouvelle interface : <code>SensorEventListener</code> qui va écouter nos capteurs pour transmettre les valeurs.</p>
 
 <p>Il faudra alors créer une classe qui implémente cette interface, et qui contiendra 2 méthodes</p>
 
@@ -96,7 +96,7 @@
 <a id="void-onsensorchangedsensorevent-event" class="anchor" href="#void-onsensorchangedsensorevent-event" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>void onSensorChanged(SensorEvent event)</code>
 </h3>
 
-<p>Cette méthode nous interresse plus, elle est appelée dès que le capteur detecte un changement. L'objet <code>SensorEvent</code> contient des données utiles : </p>
+<p>Cette méthode nous interresse plus, elle est appelée dès que le capteur détecte un changement. L'objet <code>SensorEvent</code> contient des données utiles : </p>
 
 <ul>
 <li>
@@ -110,13 +110,13 @@
 </ul>
 
 <p>Il faut donc faire notre traitement dans cette méthode. 
-/!\ : Il ne faut JAMAIS lancer d'opération bloquante ou d'opération gourmande en mémoire ici, car cette méthode sera invoquée très souvent. Vous pouriez saturer la mémoire du device très rapidement.</p>
+/!\ : Il ne faut JAMAIS lancer d'opération bloquante ou d'opération gourmande en mémoire ici, car cette méthode sera invoquée très souvent. Vous pourriez saturer la mémoire du device très rapidement.</p>
 
 <h2>
 <a id="4---ecoute-du-capteur" class="anchor" href="#4---ecoute-du-capteur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4 - Ecoute du capteur</h2>
 
 <p>Dernière étape : nous avons notre listener, il faut maintenant écouter notre capteur.
-On fait cela à de nouveau à l'aide de notre objet <code>SensorManager</code>.
+On fait cela de nouveau à l'aide de notre objet <code>SensorManager</code>.
 On utilise la méthode <code>registerListener(SensorEventListener listener, Sensor sensor, int delay)</code> avec</p>
 
 <ul>
