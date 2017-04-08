@@ -1,5 +1,7 @@
 # TP Android : Les capteurs
 
+Vous pouvez également voir le tuto sur [cette page](https://narxem.github.io/android-sensors/)
+
 ## Introduction
 
 De nombreuses applications présentes sur le store utilisent les capteurs de notre téléphone. Ces capteurs sont toujours de plus en plus nombreux. Dans ce tutoriel, vous allez apprendre comment les exploiter.
